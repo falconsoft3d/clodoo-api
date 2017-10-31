@@ -48,3 +48,6 @@ Endpoint servicio de objetos del servicio xml-rpc de Odoo (Requiere autenticaci�
 TODO: 
  - Crear los endPoint REST.
  - Implementar las funciones genéricas: autenticar, crear, editar, eliminar, listar, contar
+
+ - Implementados 31.10/, crear, listar y contar, además de funciones puntos de entradas de app.py
+ - Falta implementar editar, eliminar y cambiar para incluir la BD en el proceso de autenticación desde el API.
