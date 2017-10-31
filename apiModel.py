@@ -5,7 +5,7 @@ class ApiModel:
     database=""
     #El ID de usuario (recuperado mediante autenticacion) (Integer)
     userID=""
-    #La clave del usuario (String)
+    #La clave del  usuario (String)
     password=""
     #El nombre del modelo (String)
     model=""
