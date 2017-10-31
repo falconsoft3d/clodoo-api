@@ -34,6 +34,17 @@ class ApiController:
          result = call.execute()
          return result
 
+    def createRecord(self,idUser,password,model,fieldsAndValues):
+         method = "create"          
+         if not self.checkModelAccessMethod(idUser,password,model,"write"):
+            raise ModelNotMethodAvailableError("El modelo '"+model+"' no tiene habilitado el metodo de consulta 'create'.")
+         
+         call = ApiModel(self.api,self.database,idUser,password,model,method,fieldsAndValues,{})
+         result = call.execute()
+         return result
+
+        
+
 class ModelNotMethodAvailableError(Exception):
     def __init__(self, message):       
         super(ModelNotMethodAvailableError, self).__init__(message)       
