@@ -10,8 +10,7 @@ from apiTraductor import *
 from apiController import ApiController
 
 app = Flask(__name__)
-CORS(app)
-
+cors = CORS(app, resources={r""+conf.urlApi+"*": {"origins": "*"}})
 
 @app.route(conf.urlApi)
 def index():    
@@ -21,12 +20,13 @@ def index():
 @app.route(conf.urlApi+"auth", methods=['POST'])
 def autenticate():
     
-    if not request.json or not 'user' in request.json or not 'password' in request.json:
+    if not request.json or not 'user' in request.json or not 'password' in request.json or not 'database' in request.json:
         return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: user, password."), 406)
     user = request.json['user']
     password = request.json['password']
+    database = request.json['database']
     api =  ApiController()
-    id = api.auth(user,password);
+    id = api.auth(user,password,database);
     if not id:
         return make_response(handleError(406,"Credenciales incorrectas."), 401)
     return make_response(jsonify({'id': id}), 200) 
@@ -34,20 +34,21 @@ def autenticate():
 @app.route(conf.urlApi+"create", methods=['POST'])
 def create():
       
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'fields' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'fields' in request.json or not 'database' in request.json:
         return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model,fields ,password."), 406)
     
     id_user = request.json['id_user']
     password = request.json['password']
     model =  request.json['model']
     fields =  request.json['fields']
+    database = request.json['database']
 
     parameters = []
     parameters.append(fields)  
 
     api =  ApiController()
     try:
-        id = api.createRecord(id_user,password,model,parameters);
+        id = api.createRecord(database,id_user,password,model,parameters);
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode)
     return make_response(jsonify({'dataResult': id}), 200) 
@@ -55,7 +56,7 @@ def create():
 @app.route(conf.urlApi+"update", methods=['POST'])
 def update():
       
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'fields' in request.json or not 'idRecord' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'fields' in request.json or not 'idRecord' in request.json or not 'database' in request.json:
         return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model,fields ,password, idRecord."), 406)
         
     id_user = request.json['id_user']
@@ -63,6 +64,8 @@ def update():
     model =  request.json['model']
     fields =  request.json['fields']
     idRecord =  request.json['idRecord']
+    database = request.json['database']
+
 
     parameters = []
     parameters.append([idRecord]) 
@@ -70,7 +73,7 @@ def update():
 
     api =  ApiController()
     try:
-        data = api.writeRecord(id_user,password,model,parameters);
+        data = api.writeRecord(database,id_user,password,model,parameters);
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode)
     return make_response(jsonify({'dataResult': data}), 200) 
@@ -78,7 +81,7 @@ def update():
 @app.route(conf.urlApi+"delete", methods=['POST'])
 def delete():
       
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'idRecord' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'idRecord' in request.json or not 'database' in request.json:
          return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model, password, idRecord."), 406)
        
     
@@ -86,13 +89,15 @@ def delete():
     password = request.json['password']
     model =  request.json['model']
     idRecord =  request.json['idRecord']
+    database = request.json['database']
+
 
     parameters = []
     parameters.append(idRecord)
 
     api =  ApiController()
     try:
-        data = api.unlinkRecord(id_user,password,model,parameters);
+        data = api.unlinkRecord(database,id_user,password,model,parameters);
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode) 
     return make_response(jsonify({'dataResult': data}), 200) 
@@ -101,13 +106,15 @@ def delete():
 @app.route(conf.urlApi+"listIds", methods=['POST'])
 def listIdsRecord():
     
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'database' in request.json:
          return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model, password."), 406)
        
     
     id_user = request.json['id_user']
     password = request.json['password']
     model =  request.json['model']
+    database = request.json['database']
+
     filter_ = None
     parameters = []
     if not 'filter' in request.json:
@@ -130,7 +137,7 @@ def listIdsRecord():
 
     api =  ApiController()
     try:
-        data = api.listRecord(id_user,password,model,parameters,options)
+        data = api.listRecord(database,id_user,password,model,parameters,options)
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode)
     return make_response(jsonify({'dataResult': data}), 200) 
@@ -139,13 +146,15 @@ def listIdsRecord():
 @app.route(conf.urlApi+"count", methods=['POST'])
 def countRecord():
      
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'database' in request.json:
         return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model, password."), 406)
        
     
     id_user = request.json['id_user']
     password = request.json['password']
     model =  request.json['model']
+    database = request.json['database']
+
     filter_ = None
     parameters = []
     filters=[]
@@ -168,7 +177,7 @@ def countRecord():
 
     api =  ApiController()
     try:
-        data = api.countRecord(id_user,password,model,parameters,options)
+        data = api.countRecord(database,id_user,password,model,parameters,options)
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode) 
     return make_response(jsonify({'dataResult': data}), 200) 
@@ -177,12 +186,14 @@ def countRecord():
 @app.route(conf.urlApi+"listar", methods=['POST'])
 def listarRecord():
     
-    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json:
+    if not request.json or not 'id_user' in request.json or not 'password' in request.json or not 'model' in request.json or not 'database' in request.json:
         return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: id_user, model, password."), 406)
           
     id_user = request.json['id_user']
     password = request.json['password']
     model =  request.json['model']
+    database = request.json['database']
+
     filter_ = None
     parameters = []
     filters=[]
@@ -204,7 +215,7 @@ def listarRecord():
 
     api =  ApiController()
     try:
-        data = api.readAndSearchRecord(id_user,password,model,parameters,options)
+        data = api.readAndSearchRecord(database,id_user,password,model,parameters,options)
     except Exception,e:
         return make_response(handleError(e.faultCode,e.faultString), e.faultCode) 
     
