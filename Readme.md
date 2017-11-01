@@ -15,6 +15,7 @@ El desarrollo se está realizando Ubuntu v16.04.3 LTS
 Instalación: (Tener instalado y configurado gestor de dependencias de python pypi)
 
 1-Crear un entorno virtual (Opcional pero recomendado)
+
 	1- sudo apt-get install virtualenvwrapper
 	2- source /etc/bash_completion.d/virtualenvwrapper
 	3- mkvirtualenv odoo_env
