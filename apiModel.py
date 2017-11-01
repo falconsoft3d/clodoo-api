@@ -5,7 +5,7 @@ class ApiModel:
     database=""
     #El ID de usuario (recuperado mediante autenticacion) (Integer)
     userID=""
-    #La clave del  usuario (String)
+    #La clave del usuario (String)
     password=""
     #El nombre del modelo (String)
     model=""
@@ -13,7 +13,7 @@ class ApiModel:
     method=""
     #Lista de parametros pasados por posicion (list/array)
     parameter = []
-    #Undiccionario de opciones (dict) (Opcional)
+    #Un diccionario de opciones (dict) (Opcional)
     options = {}
 
     
