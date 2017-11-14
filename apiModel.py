@@ -1,3 +1,4 @@
+import conf
 class ApiModel:
     #Objeto de la api
     api=None
@@ -18,14 +19,15 @@ class ApiModel:
 
     
     def __init__(self,api,database,userID,password,model,method,parameter,options={}):
-        self.api=api;
+        self.api=api;	
         self.database=database
         self.userID=userID
         self.password=password
         self.model=model
         self.method=method
         self.parameter=parameter
-        self.options=options           
+        options['context'] ={'lang':conf.lang}	 
+	self.options=options	 
         self.validate()
 
 

@@ -31,6 +31,7 @@ class ApiController:
          if not self.checkModelAccessMethod(idUser,password,model,"read",database):
             raise ModelNotMethodAvailableError("El modelo '"+model+"' no tiene habilitado el metodo de consulta 'read'.")
          
+	 
          call = ApiModel(self.api,database,idUser,password,model,method,parameter,option)
          result = call.execute()
          return result
