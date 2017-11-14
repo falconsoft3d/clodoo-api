@@ -27,6 +27,10 @@ Instalación: (Tener instalado y configurado gestor de dependencias de python py
 4- python app.py
 
 *******************************************************************************************
+
+Para una instalación rápida ejecute sudo sh installer.sh
+
+*******************************************************************************************
 Configuración
 La configuracion se realiza en el fichero conf.py
 
@@ -43,6 +47,17 @@ Endpoint comun del servicio xml-rpc de Odoo (No requiere autenticación)
     commonEndPoint =  service+"/xmlrpc/2/common"
 Endpoint servicio de objetos del servicio xml-rpc de Odoo (Requiere autenticación)
     objectEndPoint =  service+"/xmlrpc/2/object" 
+
+*****************************************************************************************
+Configuración de la APP.
+
+Una vez la app en el teléfono en el login pulse sobre el botón de preferencias y deberá introducir tres configuraciones: 
+
+Base de datos : Nombre de la BD que está usando Odoo.
+Dirección del API: Es la ruta hasta esta API: http://ip.ip.ip.ip:5000/api/v1/
+Usuario: Es el usuario de Odoo con el que se conectará, se coloca aquí para recordarlo como una preferencia.
+
+Al colocar los datos pulse: Guardar preferencias y logueese en Odoo.
 
 *****************************************************************************************
 Listado de funciones en la API implementadas y ejemplos de I/O de datos.
