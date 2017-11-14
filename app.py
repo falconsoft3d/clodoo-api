@@ -10,6 +10,7 @@ from apiTraductor import *
 from apiController import ApiController
 
 app = Flask(__name__)
+
 cors = CORS(app, resources={r""+conf.urlApi+"*": {"origins": "*"}})
 
 @app.route(conf.urlApi)
@@ -21,7 +22,7 @@ def index():
 def autenticate():
     
     if not request.json or not 'user' in request.json or not 'password' in request.json or not 'database' in request.json:
-        return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: user, password."), 406)
+        return make_response(handleError(406,"Faltan atributos en el JSON de entrada. Campos requeridos: user, password, database."), 406)
     user = request.json['user']
     password = request.json['password']
     database = request.json['database']
@@ -225,4 +226,4 @@ def handleError(code,msg):
     return jsonify({"code":code,"message":msg})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
